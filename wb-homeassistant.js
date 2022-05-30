@@ -140,8 +140,13 @@ function registerSerialDevices() {
             if (device.device_type.lastIndexOf('WB-', 0) === 0) {
                 deviceInfo['manufacturer'] = 'Wiren Board';
             }
-            var deviceId = "{}_{}".format(device.device_type, device.slave_id).toLowerCase();
-            registerDevice(deviceId, deviceInfo);
+            var deviceId = "{}_{}".format(device.device_type, device.slave_id).toLowerCase().replace('.', '').replace(' ', '-');
+            if (device.enabled) {
+                registerDevice(deviceId, deviceInfo);
+            }
+            else {
+                log("Device {} is disabled, skipping registration for Home Assistant auto discovery", deviceId);
+            }
         });
     });
 }
